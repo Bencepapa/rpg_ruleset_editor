@@ -1,0 +1,6 @@
+{
+  "name": "AD&D 2e RPG Core & Ruleset Editor",
+  "description": "Pluggable AD&D 2e headless RPG runtime and full-screen ruleset, class progression, spell, item, monster, and encounter simulator workbench.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

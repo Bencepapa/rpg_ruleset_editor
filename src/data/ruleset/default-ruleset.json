@@ -1,0 +1,1378 @@
+{
+  "schemaVersion": "1.0.0",
+  "rulesetId": "adnd-2e-eob2-core",
+  "title": {
+    "en": "AD&D 2nd Edition · Eye of the Beholder II Core",
+    "hu": "AD&D 2. kiadás · Eye of the Beholder II alaprendszer"
+  },
+  "globalRules": {
+    "primeRequisiteXpThreshold": 16,
+    "primeRequisiteXpBonus": 0.1,
+    "critHitD20": 20,
+    "critMissD20": 1,
+    "moraleCheckDice": "2d6"
+  },
+  "classes": [
+    {
+      "id": "fighter",
+      "name": { "en": "Fighter", "hu": "Harcos" },
+      "description": {
+        "en": "Master of martial arms and heavy armor with the fastest THAC0 progression.",
+        "hu": "A fegyverforgatás és nehézpáncélzat mestere a leggyorsabb THAC0 fejlődéssel."
+      },
+      "resourceType": "none",
+      "primeRequisite": ["STR"],
+      "hitDie": "d10",
+      "allowedArmorMax": "heavy",
+      "allowedShieldMax": "large",
+      "allowedWeaponTags": ["sword", "axe", "mace", "polearm", "bow", "dagger", "two_handed"],
+      "canDualWield": false,
+      "spellSchool": "none",
+      "progression": [
+        { "level": 1, "xpRequired": 0, "hpGainDice": "1d10", "thac0": 20, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 2, "xpRequired": 2000, "hpGainDice": "1d10", "thac0": 19, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 3, "xpRequired": 4000, "hpGainDice": "1d10", "thac0": 18, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 4, "xpRequired": 8000, "hpGainDice": "1d10", "thac0": 17, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 5, "xpRequired": 16000, "hpGainDice": "1d10", "thac0": 16, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 6, "xpRequired": 32000, "hpGainDice": "1d10", "thac0": 15, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 7, "xpRequired": 64000, "hpGainDice": "1d10", "thac0": 14, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 8, "xpRequired": 125000, "hpGainDice": "1d10", "thac0": 13, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 9, "xpRequired": 250000, "hpGainDice": "1d10", "thac0": 12, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 10, "xpRequired": 500000, "hpGainDice": "+3", "thac0": 11, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 11, "xpRequired": 750000, "hpGainDice": "+3", "thac0": 10, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 12, "xpRequired": 1000000, "hpGainDice": "+3", "thac0": 9, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 13, "xpRequired": 1250000, "hpGainDice": "+3", "thac0": 8, "spellSlots": [0, 0, 0, 0, 0, 0] }
+      ]
+    },
+    {
+      "id": "ranger",
+      "name": { "en": "Ranger", "hu": "Vándor" },
+      "description": {
+        "en": "Wilderness tracker able to dual-wield in light armor and cast minor clerical magic at high level.",
+        "hu": "Vadonjáró felderítő, aki könnyű vértben két fegyverrel harcol és magas szinten papi varázslatokat használ."
+      },
+      "resourceType": "mana",
+      "primeRequisite": ["STR", "DEX", "WIS"],
+      "hitDie": "d10",
+      "allowedArmorMax": "heavy",
+      "allowedShieldMax": "large",
+      "allowedWeaponTags": ["sword", "axe", "bow", "dagger", "two_handed"],
+      "canDualWield": true,
+      "spellSchool": "cleric",
+      "allowedAlignments": ["LG", "NG", "CG"],
+      "allowedRaces": ["human", "elf"],
+      "progression": [
+        { "level": 1, "xpRequired": 0, "hpGainDice": "1d10", "thac0": 20, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 2, "xpRequired": 2250, "hpGainDice": "1d10", "thac0": 19, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 3, "xpRequired": 4500, "hpGainDice": "1d10", "thac0": 18, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 4, "xpRequired": 9000, "hpGainDice": "1d10", "thac0": 17, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 5, "xpRequired": 18000, "hpGainDice": "1d10", "thac0": 16, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 6, "xpRequired": 36000, "hpGainDice": "1d10", "thac0": 15, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 7, "xpRequired": 75000, "hpGainDice": "1d10", "thac0": 14, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 8, "xpRequired": 150000, "hpGainDice": "1d10", "thac0": 13, "spellSlots": [1, 0, 0, 0, 0, 0] },
+        { "level": 9, "xpRequired": 300000, "hpGainDice": "1d10", "thac0": 12, "spellSlots": [2, 0, 0, 0, 0, 0] },
+        { "level": 10, "xpRequired": 600000, "hpGainDice": "+3", "thac0": 11, "spellSlots": [2, 1, 0, 0, 0, 0] },
+        { "level": 11, "xpRequired": 900000, "hpGainDice": "+3", "thac0": 10, "spellSlots": [2, 2, 0, 0, 0, 0] },
+        { "level": 12, "xpRequired": 1200000, "hpGainDice": "+3", "thac0": 9, "spellSlots": [2, 2, 1, 0, 0, 0] },
+        { "level": 13, "xpRequired": 1500000, "hpGainDice": "+3", "thac0": 8, "spellSlots": [2, 2, 2, 0, 0, 0] }
+      ]
+    },
+    {
+      "id": "paladin",
+      "name": { "en": "Paladin", "hu": "Paladin" },
+      "description": {
+        "en": "Lawful Good holy champion sworn to defend the innocent and smite undead.",
+        "hu": "Törvényes jó szent bajnok, aki az ártatlanokat védi és az élőholtakat sújtja."
+      },
+      "resourceType": "mana",
+      "primeRequisite": ["STR", "CHA"],
+      "hitDie": "d10",
+      "allowedArmorMax": "heavy",
+      "allowedShieldMax": "large",
+      "allowedWeaponTags": ["sword", "mace", "polearm", "two_handed"],
+      "canDualWield": false,
+      "spellSchool": "cleric",
+      "allowedAlignments": ["LG"],
+      "allowedRaces": ["human"],
+      "progression": [
+        { "level": 1, "xpRequired": 0, "hpGainDice": "1d10", "thac0": 20, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 2, "xpRequired": 2250, "hpGainDice": "1d10", "thac0": 19, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 3, "xpRequired": 4500, "hpGainDice": "1d10", "thac0": 18, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 4, "xpRequired": 9000, "hpGainDice": "1d10", "thac0": 17, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 5, "xpRequired": 18000, "hpGainDice": "1d10", "thac0": 16, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 6, "xpRequired": 36000, "hpGainDice": "1d10", "thac0": 15, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 7, "xpRequired": 75000, "hpGainDice": "1d10", "thac0": 14, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 8, "xpRequired": 150000, "hpGainDice": "1d10", "thac0": 13, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 9, "xpRequired": 300000, "hpGainDice": "1d10", "thac0": 12, "spellSlots": [1, 0, 0, 0, 0, 0] },
+        { "level": 10, "xpRequired": 600000, "hpGainDice": "+3", "thac0": 11, "spellSlots": [2, 0, 0, 0, 0, 0] },
+        { "level": 11, "xpRequired": 900000, "hpGainDice": "+3", "thac0": 10, "spellSlots": [2, 1, 0, 0, 0, 0] },
+        { "level": 12, "xpRequired": 1200000, "hpGainDice": "+3", "thac0": 9, "spellSlots": [2, 2, 0, 0, 0, 0] },
+        { "level": 13, "xpRequired": 1500000, "hpGainDice": "+3", "thac0": 8, "spellSlots": [2, 2, 1, 0, 0, 0] }
+      ]
+    },
+    {
+      "id": "cleric",
+      "name": { "en": "Cleric", "hu": "Pap" },
+      "description": {
+        "en": "Armored divine spellcaster wielding blunt weapons, healing prayers, and Turn Undead.",
+        "hu": "Páncélozott isteni varázshasználó tompa fegyverekkel, gyógyító imákkal és élőholt-űzéssel."
+      },
+      "resourceType": "mana",
+      "primeRequisite": ["WIS"],
+      "hitDie": "d8",
+      "allowedArmorMax": "heavy",
+      "allowedShieldMax": "large",
+      "allowedWeaponTags": ["mace", "flail", "hammer", "staff", "sling"],
+      "canDualWield": false,
+      "spellSchool": "cleric",
+      "progression": [
+        { "level": 1, "xpRequired": 0, "hpGainDice": "1d8", "thac0": 20, "spellSlots": [1, 0, 0, 0, 0, 0] },
+        { "level": 2, "xpRequired": 1500, "hpGainDice": "1d8", "thac0": 20, "spellSlots": [2, 0, 0, 0, 0, 0] },
+        { "level": 3, "xpRequired": 3000, "hpGainDice": "1d8", "thac0": 20, "spellSlots": [2, 1, 0, 0, 0, 0] },
+        { "level": 4, "xpRequired": 6000, "hpGainDice": "1d8", "thac0": 18, "spellSlots": [3, 2, 0, 0, 0, 0] },
+        { "level": 5, "xpRequired": 13000, "hpGainDice": "1d8", "thac0": 18, "spellSlots": [3, 3, 1, 0, 0, 0] },
+        { "level": 6, "xpRequired": 27500, "hpGainDice": "1d8", "thac0": 18, "spellSlots": [3, 3, 2, 0, 0, 0] },
+        { "level": 7, "xpRequired": 55000, "hpGainDice": "1d8", "thac0": 16, "spellSlots": [3, 3, 2, 1, 0, 0] },
+        { "level": 8, "xpRequired": 110000, "hpGainDice": "1d8", "thac0": 16, "spellSlots": [3, 3, 3, 2, 0, 0] },
+        { "level": 9, "xpRequired": 225000, "hpGainDice": "1d8", "thac0": 16, "spellSlots": [4, 4, 3, 2, 1, 0] },
+        { "level": 10, "xpRequired": 450000, "hpGainDice": "+2", "thac0": 14, "spellSlots": [4, 4, 3, 3, 2, 0] },
+        { "level": 11, "xpRequired": 675000, "hpGainDice": "+2", "thac0": 14, "spellSlots": [5, 4, 4, 3, 2, 1] },
+        { "level": 12, "xpRequired": 900000, "hpGainDice": "+2", "thac0": 14, "spellSlots": [6, 5, 5, 3, 2, 2] },
+        { "level": 13, "xpRequired": 1125000, "hpGainDice": "+2", "thac0": 12, "spellSlots": [6, 6, 6, 4, 2, 2] }
+      ]
+    },
+    {
+      "id": "mage",
+      "name": { "en": "Mage", "hu": "Varázsló" },
+      "description": {
+        "en": "Arcane scholar memorizing spells from spellbooks for devastating elemental and control magic.",
+        "hu": "Arkán tudós, aki varázskönyvéből memorizálja az elemi és irányító mágiákat."
+      },
+      "resourceType": "mana",
+      "primeRequisite": ["INT"],
+      "hitDie": "d4",
+      "allowedArmorMax": "none",
+      "allowedShieldMax": "none",
+      "allowedWeaponTags": ["dagger", "staff", "dart", "sling"],
+      "canDualWield": false,
+      "spellSchool": "mage",
+      "progression": [
+        { "level": 1, "xpRequired": 0, "hpGainDice": "1d4", "thac0": 20, "spellSlots": [1, 0, 0, 0, 0, 0] },
+        { "level": 2, "xpRequired": 2500, "hpGainDice": "1d4", "thac0": 20, "spellSlots": [2, 0, 0, 0, 0, 0] },
+        { "level": 3, "xpRequired": 5000, "hpGainDice": "1d4", "thac0": 20, "spellSlots": [2, 1, 0, 0, 0, 0] },
+        { "level": 4, "xpRequired": 10000, "hpGainDice": "1d4", "thac0": 19, "spellSlots": [3, 2, 0, 0, 0, 0] },
+        { "level": 5, "xpRequired": 20000, "hpGainDice": "1d4", "thac0": 19, "spellSlots": [4, 2, 1, 0, 0, 0] },
+        { "level": 6, "xpRequired": 40000, "hpGainDice": "1d4", "thac0": 19, "spellSlots": [4, 2, 2, 0, 0, 0] },
+        { "level": 7, "xpRequired": 60000, "hpGainDice": "1d4", "thac0": 18, "spellSlots": [4, 3, 2, 1, 0, 0] },
+        { "level": 8, "xpRequired": 90000, "hpGainDice": "1d4", "thac0": 18, "spellSlots": [4, 3, 3, 2, 0, 0] },
+        { "level": 9, "xpRequired": 135000, "hpGainDice": "1d4", "thac0": 18, "spellSlots": [4, 3, 3, 2, 1, 0] },
+        { "level": 10, "xpRequired": 250000, "hpGainDice": "1d4", "thac0": 17, "spellSlots": [4, 4, 3, 2, 2, 0] },
+        { "level": 11, "xpRequired": 375000, "hpGainDice": "+1", "thac0": 17, "spellSlots": [4, 4, 4, 3, 3, 0] },
+        { "level": 12, "xpRequired": 750000, "hpGainDice": "+1", "thac0": 17, "spellSlots": [4, 4, 4, 4, 4, 1] },
+        { "level": 13, "xpRequired": 1125000, "hpGainDice": "+1", "thac0": 16, "spellSlots": [5, 5, 5, 4, 4, 2] }
+      ]
+    },
+    {
+      "id": "thief",
+      "name": { "en": "Thief", "hu": "Tolvaj" },
+      "description": {
+        "en": "Nimble rogue excelling at lockpicking, trap detection, and ranged skirmishing.",
+        "hu": "Ügyes zsivány, aki zárfeltörésben, csapdaészlelésben és távolsági harcban jeleskedik."
+      },
+      "resourceType": "none",
+      "primeRequisite": ["DEX"],
+      "hitDie": "d6",
+      "allowedArmorMax": "leather",
+      "allowedShieldMax": "none",
+      "allowedWeaponTags": ["sword", "dagger", "bow", "sling", "dart"],
+      "canDualWield": false,
+      "spellSchool": "none",
+      "progression": [
+        { "level": 1, "xpRequired": 0, "hpGainDice": "1d6", "thac0": 20, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 2, "xpRequired": 1250, "hpGainDice": "1d6", "thac0": 20, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 3, "xpRequired": 2500, "hpGainDice": "1d6", "thac0": 19, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 4, "xpRequired": 5000, "hpGainDice": "1d6", "thac0": 19, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 5, "xpRequired": 10000, "hpGainDice": "1d6", "thac0": 18, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 6, "xpRequired": 20000, "hpGainDice": "1d6", "thac0": 18, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 7, "xpRequired": 40000, "hpGainDice": "1d6", "thac0": 17, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 8, "xpRequired": 70000, "hpGainDice": "1d6", "thac0": 17, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 9, "xpRequired": 110000, "hpGainDice": "1d6", "thac0": 16, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 10, "xpRequired": 160000, "hpGainDice": "1d6", "thac0": 16, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 11, "xpRequired": 220000, "hpGainDice": "+2", "thac0": 15, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 12, "xpRequired": 440000, "hpGainDice": "+2", "thac0": 15, "spellSlots": [0, 0, 0, 0, 0, 0] },
+        { "level": 13, "xpRequired": 660000, "hpGainDice": "+2", "thac0": 14, "spellSlots": [0, 0, 0, 0, 0, 0] }
+      ]
+    }
+  ],
+  "races": [
+    {
+      "id": "human",
+      "name": { "en": "Human", "hu": "Ember" },
+      "playable": true,
+      "statModifiers": {},
+      "baseMorale": 8,
+      "allowedClassIds": ["fighter", "ranger", "paladin", "cleric", "mage", "thief"],
+      "allowedMulticlassIds": [],
+      "immunities": {}
+    },
+    {
+      "id": "elf",
+      "name": { "en": "Elf", "hu": "Tünde" },
+      "playable": true,
+      "statModifiers": { "DEX": 1, "CON": -1 },
+      "baseMorale": 8,
+      "allowedClassIds": ["fighter", "ranger", "mage", "thief"],
+      "allowedMulticlassIds": ["fighter_mage", "fighter_thief", "mage_thief", "fighter_mage_thief"],
+      "immunities": { "raiseDead": true }
+    },
+    {
+      "id": "dwarf",
+      "name": { "en": "Dwarf", "hu": "Törpe" },
+      "playable": true,
+      "statModifiers": { "CON": 1, "CHA": -1 },
+      "baseMorale": 10,
+      "allowedClassIds": ["fighter", "cleric", "thief"],
+      "allowedMulticlassIds": ["fighter_cleric", "fighter_thief"],
+      "immunities": { "poison": false }
+    },
+    {
+      "id": "orc",
+      "name": { "en": "Orc", "hu": "Ork" },
+      "playable": false,
+      "statModifiers": { "STR": 1, "INT": -2, "CHA": -2 },
+      "baseMorale": 7,
+      "allowedClassIds": ["fighter"],
+      "allowedMulticlassIds": [],
+      "immunities": {}
+    },
+    {
+      "id": "skeleton",
+      "name": { "en": "Skeleton", "hu": "Csontváz" },
+      "playable": false,
+      "statModifiers": { "DEX": 1, "CHA": -4 },
+      "baseMorale": 12,
+      "allowedClassIds": ["fighter"],
+      "allowedMulticlassIds": [],
+      "immunities": { "holdPerson": true, "fear": true, "poison": true, "weightTraps": true }
+    },
+    {
+      "id": "zombie",
+      "name": { "en": "Zombie", "hu": "Zombi" },
+      "playable": false,
+      "statModifiers": { "STR": 1, "DEX": -2, "CHA": -4 },
+      "baseMorale": 12,
+      "allowedClassIds": ["fighter"],
+      "allowedMulticlassIds": [],
+      "immunities": { "holdPerson": true, "fear": true, "poison": true, "arrowCorridorResist": 0.75 }
+    }
+  ],
+  "spells": [
+    {
+      "id": "armor",
+      "name": { "en": "Armor", "hu": "Páncél" },
+      "school": "mage",
+      "tier": 1,
+      "category": "defensive",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "ac_override", "setBaseAc": 6, "nonStackingGroup": "base_ac_spell", "applyStatus": "armor_spell", "durationSec": 600 },
+      "description": { "en": "Surrounds the target with a magical field equivalent to scale mail (Base AC 6).", "hu": "Mágikus mezővel veszi körül a célpontot, amely 6-os alap AC-t ad." }
+    },
+    {
+      "id": "burning_hands",
+      "name": { "en": "Burning Hands", "hu": "Égető kezek" },
+      "school": "mage",
+      "tier": 1,
+      "category": "offensive",
+      "targetScope": "front_row_enemies",
+      "requiresFrontRow": true,
+      "castTimeMs": 500,
+      "formula": { "effectType": "damage", "dice": "1d3+2", "scalesWithCasterLevel": true, "damageType": "fire", "saveNegates": false },
+      "description": { "en": "Jet of flame searing all front-row enemies; scales with caster level.", "hu": "Lángcsóva az első sorban álló ellenségekre; a varázsló szintjével növekszik." }
+    },
+    {
+      "id": "detect_magic_mage",
+      "name": { "en": "Detect Magic", "hu": "Mágia érzékelése" },
+      "school": "mage",
+      "tier": 1,
+      "category": "detection",
+      "targetScope": "self",
+      "requiresFrontRow": false,
+      "castTimeMs": 400,
+      "formula": { "effectType": "utility", "durationSec": 120 },
+      "description": { "en": "Reveals magical enchantments on nearby items and mechanisms.", "hu": "Felfedi a közeli tárgyakon és szerkezeteken lévő mágikus aurát." }
+    },
+    {
+      "id": "magic_missile",
+      "name": { "en": "Magic Missile", "hu": "Mágikus lövedék" },
+      "school": "mage",
+      "tier": 1,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": false,
+      "castTimeMs": 400,
+      "formula": { "effectType": "damage", "dice": "1d4+1", "scalesWithCasterLevel": true, "damageType": "magic", "saveNegates": false },
+      "description": { "en": "Unerring bolts of force; fires additional missiles every odd level.", "hu": "Tévedhetetlen erőlövedékek; minden páratlan szinten újabb lövedéket indít." }
+    },
+    {
+      "id": "shield",
+      "name": { "en": "Shield", "hu": "Pajzs" },
+      "school": "mage",
+      "tier": 1,
+      "category": "defensive",
+      "targetScope": "self",
+      "requiresFrontRow": false,
+      "castTimeMs": 400,
+      "formula": { "effectType": "ac_override", "setBaseAc": 4, "nonStackingGroup": "base_ac_spell", "applyStatus": "shield_spell", "durationSec": 300 },
+      "description": { "en": "Creates an invisible barrier granting AC 4 and immunity to Magic Missile.", "hu": "Láthatatlan pajzsot hoz létre, amely 4-es alap AC-t ad." }
+    },
+    {
+      "id": "shocking_grasp",
+      "name": { "en": "Shocking Grasp", "hu": "Sokkoló érintés" },
+      "school": "mage",
+      "tier": 1,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 450,
+      "formula": { "effectType": "damage", "dice": "1d8+1", "scalesWithCasterLevel": true, "damageType": "lightning" },
+      "description": { "en": "Touch attack discharging lightning into a front-row foe.", "hu": "Érintés alapú villámcsapás egy elülső soros ellenfélre." }
+    },
+    {
+      "id": "blur",
+      "name": { "en": "Blur", "hu": "Elmosódás" },
+      "school": "mage",
+      "tier": 2,
+      "category": "defensive",
+      "targetScope": "self",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "buff", "durationSec": 180 },
+      "description": { "en": "Distorts the caster's outline, improving AC by 3 against attacks.", "hu": "Elhomályosítja a varázsló körvonalát, javítva az AC-t." }
+    },
+    {
+      "id": "detect_invisibility",
+      "name": { "en": "Detect Invisibility", "hu": "Láthatatlanság észlelése" },
+      "school": "mage",
+      "tier": 2,
+      "category": "detection",
+      "targetScope": "self",
+      "requiresFrontRow": false,
+      "castTimeMs": 400,
+      "formula": { "effectType": "utility", "durationSec": 300 },
+      "description": { "en": "Allows the caster to perceive invisible creatures and traps.", "hu": "Lehetővé teszi a láthatatlan lények észlelését." }
+    },
+    {
+      "id": "improved_identify",
+      "name": { "en": "Improved Identify", "hu": "Fejlett azonosítás" },
+      "school": "mage",
+      "tier": 2,
+      "category": "detection",
+      "targetScope": "self",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "utility" },
+      "description": { "en": "Reveals hidden magic bonuses and curses on carried items.", "hu": "Felfedi a tárgyak rejtett mágikus bónuszait és átkait." }
+    },
+    {
+      "id": "invisibility",
+      "name": { "en": "Invisibility", "hu": "Láthatatlanság" },
+      "school": "mage",
+      "tier": 2,
+      "category": "defensive",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "buff", "applyStatus": "invisible", "durationSec": 300 },
+      "description": { "en": "Renders an ally invisible until they attack or cast a spell.", "hu": "Láthatatlanná tesz egy szövetségest támadásig vagy varázslásig." }
+    },
+    {
+      "id": "melfs_acid_arrow",
+      "name": { "en": "Melf's Acid Arrow", "hu": "Melf savnyila" },
+      "school": "mage",
+      "tier": 2,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "damage", "dice": "2d4", "damageType": "acid" },
+      "description": { "en": "Magical arrow that deals acid damage on impact.", "hu": "Mágikus savnyíl, amely becsapódáskor savsebzést okoz." }
+    },
+    {
+      "id": "dispel_magic_mage",
+      "name": { "en": "Dispel Magic", "hu": "Mágia semlegesítése" },
+      "school": "mage",
+      "tier": 3,
+      "category": "support",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "cure_status", "removeStatus": ["paralyzed", "feared", "blinded", "hasted", "blessed"] },
+      "description": { "en": "Strips active magical effects and hexes from targets.", "hu": "Eltávolítja az aktív mágikus hatásokat és átkokat." }
+    },
+    {
+      "id": "fireball",
+      "name": { "en": "Fireball", "hu": "Tűzgolyó" },
+      "school": "mage",
+      "tier": 3,
+      "category": "offensive",
+      "targetScope": "all_enemies",
+      "requiresFrontRow": false,
+      "castTimeMs": 700,
+      "formula": { "effectType": "damage", "dice": "1d6", "scalesWithCasterLevel": true, "damageType": "fire", "saveNegates": false },
+      "description": { "en": "Explosive sphere dealing 1d6 fire damage per caster level to all enemies.", "hu": "Robbanó tűzgömb, amely szintenként 1d6 tűzsebzést okoz." }
+    },
+    {
+      "id": "haste",
+      "name": { "en": "Haste", "hu": "Gyorsítás" },
+      "school": "mage",
+      "tier": 3,
+      "category": "support",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "buff", "applyStatus": "hasted", "durationSec": 120 },
+      "description": { "en": "Doubles movement and attack speed of the entire party.", "hu": "Megduplázza a csapat mozgási és támadási sebességét." }
+    },
+    {
+      "id": "hold_person_mage",
+      "name": { "en": "Hold Person", "hu": "Személy bénítása" },
+      "school": "mage",
+      "tier": 3,
+      "category": "control",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "debuff", "applyStatus": "paralyzed", "durationSec": 60, "saveNegates": true, "immuneTags": ["undead"] },
+      "description": { "en": "Paralyzes humanoid foes; undead are immune.", "hu": "Megbénítja a humanoid ellenfeleket; az élőholtak immunisak." }
+    },
+    {
+      "id": "lightning_bolt",
+      "name": { "en": "Lightning Bolt", "hu": "Villámcsapás" },
+      "school": "mage",
+      "tier": 3,
+      "category": "offensive",
+      "targetScope": "cross_aoe",
+      "requiresFrontRow": false,
+      "castTimeMs": 650,
+      "formula": { "effectType": "damage", "dice": "1d6", "scalesWithCasterLevel": true, "damageType": "lightning" },
+      "description": { "en": "Crackling electrical bolt tearing through enemy ranks.", "hu": "Erőteljes villámcsapás az ellenséges sorokon keresztül." }
+    },
+    {
+      "id": "vampiric_touch",
+      "name": { "en": "Vampiric Touch", "hu": "Vámpírérintés" },
+      "school": "mage",
+      "tier": 3,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 550,
+      "formula": { "effectType": "damage", "dice": "3d6", "damageType": "necrotic" },
+      "description": { "en": "Drains life force from a front-row enemy on touch.", "hu": "Életerőt szív el egy elülső soros ellenségtől érintéssel." }
+    },
+    {
+      "id": "fear",
+      "name": { "en": "Fear", "hu": "Félelem" },
+      "school": "mage",
+      "tier": 4,
+      "category": "control",
+      "targetScope": "all_enemies",
+      "requiresFrontRow": false,
+      "castTimeMs": 650,
+      "formula": { "effectType": "debuff", "applyStatus": "feared", "moraleDelta": -4, "durationSec": 45, "saveNegates": true, "immuneTags": ["undead"] },
+      "description": { "en": "Strikes terror into living foes, forcing a morale break check.", "hu": "Rémületet kelt az élő ellenfelekben, azonnali morálpróbát kényszerítve." }
+    },
+    {
+      "id": "ice_storm",
+      "name": { "en": "Ice Storm", "hu": "Jégvihar" },
+      "school": "mage",
+      "tier": 4,
+      "category": "offensive",
+      "targetScope": "all_enemies",
+      "requiresFrontRow": false,
+      "castTimeMs": 700,
+      "formula": { "effectType": "damage", "dice": "3d10", "damageType": "cold" },
+      "description": { "en": "Pelting hailstones battering all enemies with cold damage.", "hu": "Jeges jégeső, amely minden ellenséget fagysebzéssel sújt." }
+    },
+    {
+      "id": "improved_invisibility",
+      "name": { "en": "Improved Invisibility", "hu": "Fejlett láthatatlanság" },
+      "school": "mage",
+      "tier": 4,
+      "category": "defensive",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "buff", "applyStatus": "improved_invisible", "durationSec": 120 },
+      "description": { "en": "Grants combat invisibility that persists even when attacking.", "hu": "Harc közben is fennmaradó láthatatlanságot biztosít." }
+    },
+    {
+      "id": "cone_of_cold",
+      "name": { "en": "Cone of Cold", "hu": "Fagykúp" },
+      "school": "mage",
+      "tier": 5,
+      "category": "offensive",
+      "targetScope": "front_row_enemies",
+      "requiresFrontRow": false,
+      "castTimeMs": 750,
+      "formula": { "effectType": "damage", "dice": "1d4+1", "scalesWithCasterLevel": true, "damageType": "cold" },
+      "description": { "en": "Freezing cone blasting enemies for 1d4+1 cold damage per level.", "hu": "Fagyasztó kúp, amely szintenként 1d4+1 fagysebzést okoz." }
+    },
+    {
+      "id": "hold_monster",
+      "name": { "en": "Hold Monster", "hu": "Szörny bénítása" },
+      "school": "mage",
+      "tier": 5,
+      "category": "control",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": false,
+      "castTimeMs": 700,
+      "formula": { "effectType": "debuff", "applyStatus": "paralyzed", "durationSec": 60, "saveNegates": true, "immuneTags": ["undead"] },
+      "description": { "en": "Immobilizes any living creature; undead remain unaffected.", "hu": "Bénítja bármely élő lényt; az élőholtak immunisak." }
+    },
+    {
+      "id": "bless",
+      "name": { "en": "Bless", "hu": "Áldás" },
+      "school": "cleric",
+      "tier": 1,
+      "category": "support",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "buff", "applyStatus": "blessed", "durationSec": 180 },
+      "description": { "en": "Grants +1 to attack rolls and morale for all party members.", "hu": "+1 támadódobást és morálbónuszt ad az egész csapatnak." }
+    },
+    {
+      "id": "cause_light_wounds",
+      "name": { "en": "Cause Light Wounds", "hu": "Könnyű sebek okozása" },
+      "school": "cleric",
+      "tier": 1,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 500,
+      "formula": { "effectType": "damage", "dice": "1d8", "damageType": "necrotic" },
+      "description": { "en": "Channels dark divine energy via touch to inflict 1d8 damage.", "hu": "Érintéssel 1d8 nekrotikus sebzést okoz az ellenfélnek." }
+    },
+    {
+      "id": "cure_light_wounds",
+      "name": { "en": "Cure Light Wounds", "hu": "Könnyű sebek gyógyítása" },
+      "school": "cleric",
+      "tier": 1,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "heal", "dice": "1d8" },
+      "description": { "en": "Restores 1d8 hit points to a wounded ally.", "hu": "1d8 életerőt gyógyít egy sebesült szövetségesen." }
+    },
+    {
+      "id": "protection_from_evil",
+      "name": { "en": "Protection from Evil", "hu": "Védelem a gonosztól" },
+      "school": "cleric",
+      "tier": 1,
+      "category": "defensive",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "buff", "applyStatus": "protected_evil", "durationSec": 240 },
+      "description": { "en": "Wards an ally with -2 AC penalty to evil attackers.", "hu": "Védőaurával lát el egy szövetségest a gonosz támadók ellen." }
+    },
+    {
+      "id": "aid",
+      "name": { "en": "Aid", "hu": "Segítség" },
+      "school": "cleric",
+      "tier": 2,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "heal", "dice": "1d8", "applyStatus": "blessed", "durationSec": 120 },
+      "description": { "en": "Grants blessing and restores 1d8 hit points.", "hu": "Áldást ad és visszaállít 1d8 életerőt." }
+    },
+    {
+      "id": "flame_blade",
+      "name": { "en": "Flame Blade", "hu": "Lángpenge" },
+      "school": "cleric",
+      "tier": 2,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 500,
+      "formula": { "effectType": "damage", "dice": "1d4+4", "damageType": "fire" },
+      "description": { "en": "Strikes a front-row foe with a summoned blade of fire.", "hu": "Megidézett tűzpengével sújt le egy elülső ellenségre." }
+    },
+    {
+      "id": "hold_person_cleric",
+      "name": { "en": "Hold Person (Cleric)", "hu": "Személy bénítása (Papi)" },
+      "school": "cleric",
+      "tier": 2,
+      "category": "control",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": false,
+      "castTimeMs": 550,
+      "formula": { "effectType": "debuff", "applyStatus": "paralyzed", "durationSec": 60, "saveNegates": true, "immuneTags": ["undead"] },
+      "description": { "en": "Freezes living humanoid opponents in place.", "hu": "Megdermeszti az élő humanoid ellenfeleket." }
+    },
+    {
+      "id": "slow_poison",
+      "name": { "en": "Slow Poison", "hu": "Méreg lassítása" },
+      "school": "cleric",
+      "tier": 2,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 450,
+      "formula": { "effectType": "cure_status", "removeStatus": ["poisoned"] },
+      "description": { "en": "Halts toxin progression and clears active poison.", "hu": "Megállítja a méreg terjedését és semlegesíti azt." }
+    },
+    {
+      "id": "create_food",
+      "name": { "en": "Create Food", "hu": "Élelem teremtése" },
+      "school": "cleric",
+      "tier": 3,
+      "category": "support",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 700,
+      "formula": { "effectType": "utility" },
+      "description": { "en": "Conjures nourishing rations to sustain the party during rest.", "hu": "Tápláló élelmet teremt a csapat pihenéséhez." }
+    },
+    {
+      "id": "dispel_magic_cleric",
+      "name": { "en": "Dispel Magic (Cleric)", "hu": "Mágia semlegesítése (Papi)" },
+      "school": "cleric",
+      "tier": 3,
+      "category": "support",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "cure_status", "removeStatus": ["paralyzed", "feared", "blinded"] },
+      "description": { "en": "Banishes hostile enchantments and status ailments.", "hu": "Elűzi az ellenséges varázslatokat és állapotokat." }
+    },
+    {
+      "id": "magical_vestment",
+      "name": { "en": "Magical Vestment", "hu": "Mágikus öltözék" },
+      "school": "cleric",
+      "tier": 3,
+      "category": "defensive",
+      "targetScope": "self",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "ac_override", "setBaseAc": 5, "nonStackingGroup": "base_ac_spell", "applyStatus": "armor_spell", "durationSec": 300 },
+      "description": { "en": "Enchants vestments to grant Base AC 5.", "hu": "Megáldja a köntöst, 5-ös alap AC-t biztosítva." }
+    },
+    {
+      "id": "prayer",
+      "name": { "en": "Prayer", "hu": "Ima" },
+      "school": "cleric",
+      "tier": 3,
+      "category": "support",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 550,
+      "formula": { "effectType": "buff", "applyStatus": "blessed", "durationSec": 90 },
+      "description": { "en": "Bolsters allies with divine favor in combat.", "hu": "Isteni támogatással erősíti a szövetségeseket harcban." }
+    },
+    {
+      "id": "remove_paralysis",
+      "name": { "en": "Remove Paralysis", "hu": "Bénulás feloldása" },
+      "school": "cleric",
+      "tier": 3,
+      "category": "healing",
+      "targetScope": "all_allies",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "cure_status", "removeStatus": ["paralyzed"] },
+      "description": { "en": "Frees allies from magical or venomous paralysis.", "hu": "Felszabadítja a szövetségeseket a bénulás alól." }
+    },
+    {
+      "id": "cause_serious_wounds",
+      "name": { "en": "Cause Serious Wounds", "hu": "Súlyos sebek okozása" },
+      "school": "cleric",
+      "tier": 4,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 550,
+      "formula": { "effectType": "damage", "dice": "2d8+1", "damageType": "necrotic" },
+      "description": { "en": "Inflicts severe necrotic wounds on a front-row foe.", "hu": "Súlyos nekrotikus sebeket okoz érintésből." }
+    },
+    {
+      "id": "cure_serious_wounds",
+      "name": { "en": "Cure Serious Wounds", "hu": "Súlyos sebek gyógyítása" },
+      "school": "cleric",
+      "tier": 4,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 550,
+      "formula": { "effectType": "heal", "dice": "2d8+1" },
+      "description": { "en": "Mends major injuries, restoring 2d8+1 hit points.", "hu": "Súlyos sérüléseket gyógyít, 2d8+1 életerőt visszaadva." }
+    },
+    {
+      "id": "neutralize_poison",
+      "name": { "en": "Neutralize Poison", "hu": "Méreg közömbösítése" },
+      "school": "cleric",
+      "tier": 4,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 500,
+      "formula": { "effectType": "cure_status", "removeStatus": ["poisoned"] },
+      "description": { "en": "Purges all venoms and poisons from the target.", "hu": "Teljesen megtisztítja a célpontot minden méregtől." }
+    },
+    {
+      "id": "cause_critical_wounds",
+      "name": { "en": "Cause Critical Wounds", "hu": "Kritikus sebek okozása" },
+      "school": "cleric",
+      "tier": 5,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 600,
+      "formula": { "effectType": "damage", "dice": "3d8+3", "damageType": "necrotic" },
+      "description": { "en": "Devastating touch attack dealing 3d8+3 necrotic damage.", "hu": "Pusztító érintés, amely 3d8+3 nekrotikus sebzést okoz." }
+    },
+    {
+      "id": "cure_critical_wounds",
+      "name": { "en": "Cure Critical Wounds", "hu": "Kritikus sebek gyógyítása" },
+      "school": "cleric",
+      "tier": 5,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 600,
+      "formula": { "effectType": "heal", "dice": "3d8+3" },
+      "description": { "en": "Restores 3d8+3 hit points to a critically wounded ally.", "hu": "3d8+3 életerőt állít helyre egy súlyosan sérült társon." }
+    },
+    {
+      "id": "flame_strike",
+      "name": { "en": "Flame Strike", "hu": "Lángcsapás" },
+      "school": "cleric",
+      "tier": 5,
+      "category": "offensive",
+      "targetScope": "all_enemies",
+      "requiresFrontRow": false,
+      "castTimeMs": 750,
+      "formula": { "effectType": "damage", "dice": "6d8", "damageType": "fire" },
+      "description": { "en": "Vertical pillar of divine fire engulfing enemies for 6d8 damage.", "hu": "Isteni tűzoszlop, amely 6d8 tűzsebzéssel sújt le." }
+    },
+    {
+      "id": "raise_dead",
+      "name": { "en": "Raise Dead", "hu": "Halott feltámasztása" },
+      "school": "cleric",
+      "tier": 5,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 900,
+      "formula": { "effectType": "cure_status", "removeStatus": ["dead", "downed"], "dice": "1d4" },
+      "description": { "en": "Returns a fallen non-elf companion to life.", "hu": "Visszahozza az életbe egy elesett (nem tünde) társát." }
+    },
+    {
+      "id": "harm",
+      "name": { "en": "Harm", "hu": "Ártás" },
+      "school": "cleric",
+      "tier": 6,
+      "category": "offensive",
+      "targetScope": "single_enemy",
+      "requiresFrontRow": true,
+      "castTimeMs": 700,
+      "formula": { "effectType": "damage", "dice": "8d8", "damageType": "necrotic" },
+      "description": { "en": "Supreme necrotic touch reducing a foe to near-death.", "hu": "Hatalmas nekrotikus érintés, amely súlyosan megsebesíti a célpontot." }
+    },
+    {
+      "id": "heal",
+      "name": { "en": "Heal", "hu": "Gyógyítás" },
+      "school": "cleric",
+      "tier": 6,
+      "category": "healing",
+      "targetScope": "single_ally",
+      "requiresFrontRow": false,
+      "castTimeMs": 700,
+      "formula": { "effectType": "heal", "dice": "10d8", "removeStatus": ["blinded", "poisoned", "downed"] },
+      "description": { "en": "Channels massive healing and cures blindness and poison.", "hu": "Hatalmas gyógyító erő, amely a vakságot és a mérget is megszünteti." }
+    }
+  ],
+  "items": [
+    {
+      "id": "long_sword",
+      "name": { "en": "Long Sword", "hu": "Hosszúkard" },
+      "category": "weapon",
+      "slot": "main_hand",
+      "inventoryIconId": "icon_long_sword",
+      "worldVisualId": "mesh_long_sword",
+      "weight": 4,
+      "goldValue": 15,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "weaponStats": {
+        "damageDice": "1d8",
+        "damageType": "slashing",
+        "magicBonus": 0,
+        "attackSpeedMs": 1400,
+        "range": "melee",
+        "twoHanded": false,
+        "tags": ["sword"]
+      }
+    },
+    {
+      "id": "long_sword_plus2",
+      "name": { "en": "Long Sword +2", "hu": "Hosszúkard +2" },
+      "category": "weapon",
+      "slot": "main_hand",
+      "inventoryIconId": "icon_long_sword_magic",
+      "worldVisualId": "mesh_long_sword_magic",
+      "weight": 4,
+      "goldValue": 1200,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": false,
+      "weaponStats": {
+        "damageDice": "1d8",
+        "damageType": "slashing",
+        "magicBonus": 2,
+        "attackSpeedMs": 1300,
+        "range": "melee",
+        "twoHanded": false,
+        "tags": ["sword"]
+      }
+    },
+    {
+      "id": "two_handed_sword",
+      "name": { "en": "Two-Handed Sword", "hu": "Kétkezes kard" },
+      "category": "weapon",
+      "slot": "main_hand",
+      "inventoryIconId": "icon_greatsword",
+      "worldVisualId": "mesh_greatsword",
+      "weight": 15,
+      "goldValue": 50,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "weaponStats": {
+        "damageDice": "1d10",
+        "damageType": "slashing",
+        "magicBonus": 0,
+        "attackSpeedMs": 1900,
+        "range": "melee",
+        "twoHanded": true,
+        "tags": ["sword", "two_handed"]
+      }
+    },
+    {
+      "id": "mace_plus1",
+      "name": { "en": "Footman's Mace +1", "hu": "Buzogány +1" },
+      "category": "weapon",
+      "slot": "main_hand",
+      "inventoryIconId": "icon_mace",
+      "worldVisualId": "mesh_mace",
+      "weight": 10,
+      "goldValue": 550,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "weaponStats": {
+        "damageDice": "1d6+1",
+        "damageType": "bludgeoning",
+        "magicBonus": 1,
+        "attackSpeedMs": 1500,
+        "range": "melee",
+        "twoHanded": false,
+        "tags": ["mace"]
+      }
+    },
+    {
+      "id": "dagger",
+      "name": { "en": "Dagger", "hu": "Tőr" },
+      "category": "weapon",
+      "slot": "main_hand",
+      "inventoryIconId": "icon_dagger",
+      "worldVisualId": "mesh_dagger",
+      "weight": 1,
+      "goldValue": 2,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "weaponStats": {
+        "damageDice": "1d4",
+        "damageType": "piercing",
+        "magicBonus": 0,
+        "attackSpeedMs": 1000,
+        "range": "melee",
+        "twoHanded": false,
+        "tags": ["dagger"]
+      }
+    },
+    {
+      "id": "short_bow",
+      "name": { "en": "Short Bow", "hu": "Rövid íj" },
+      "category": "weapon",
+      "slot": "main_hand",
+      "inventoryIconId": "icon_short_bow",
+      "worldVisualId": "mesh_short_bow",
+      "weight": 2,
+      "goldValue": 30,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "weaponStats": {
+        "damageDice": "1d6",
+        "damageType": "piercing",
+        "magicBonus": 0,
+        "attackSpeedMs": 1400,
+        "range": "ranged",
+        "twoHanded": true,
+        "tags": ["bow"]
+      }
+    },
+    {
+      "id": "leather_armor",
+      "name": { "en": "Leather Armor", "hu": "Bőrpáncél" },
+      "category": "armor",
+      "slot": "chest",
+      "inventoryIconId": "icon_leather_armor",
+      "worldVisualId": "mesh_leather_armor",
+      "weight": 15,
+      "goldValue": 5,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "armorStats": {
+        "baseAc": 8,
+        "armorWeight": "leather"
+      }
+    },
+    {
+      "id": "chainmail",
+      "name": { "en": "Chainmail", "hu": "Láncing" },
+      "category": "armor",
+      "slot": "chest",
+      "inventoryIconId": "icon_chainmail",
+      "worldVisualId": "mesh_chainmail",
+      "weight": 40,
+      "goldValue": 75,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "armorStats": {
+        "baseAc": 5,
+        "armorWeight": "light_metal"
+      }
+    },
+    {
+      "id": "plate_mail",
+      "name": { "en": "Plate Mail", "hu": "Lemezvért" },
+      "category": "armor",
+      "slot": "chest",
+      "inventoryIconId": "icon_plate_mail",
+      "worldVisualId": "mesh_plate_mail",
+      "weight": 50,
+      "goldValue": 600,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "armorStats": {
+        "baseAc": 3,
+        "armorWeight": "heavy"
+      }
+    },
+    {
+      "id": "medium_shield",
+      "name": { "en": "Medium Shield", "hu": "Közepes pajzs" },
+      "category": "shield",
+      "slot": "off_hand",
+      "inventoryIconId": "icon_medium_shield",
+      "worldVisualId": "mesh_medium_shield",
+      "weight": 10,
+      "goldValue": 7,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": true,
+      "armorStats": {
+        "acBonus": 1,
+        "armorWeight": "light_metal"
+      }
+    },
+    {
+      "id": "ring_protection_plus1",
+      "name": { "en": "Ring of Protection +1", "hu": "Védelem gyűrűje +1" },
+      "category": "accessory",
+      "slot": "ring",
+      "inventoryIconId": "icon_ring_gold",
+      "worldVisualId": "mesh_ring_gold",
+      "weight": 0.1,
+      "goldValue": 2000,
+      "stackable": false,
+      "maxStack": 1,
+      "identifiedByDefault": false,
+      "armorStats": {
+        "acBonus": 1,
+        "armorWeight": "none"
+      }
+    },
+    {
+      "id": "cursed_ring_clumsiness",
+      "name": { "en": "Ring of Clumsiness", "hu": "Ügyetlenség gyűrűje" },
+      "category": "accessory",
+      "slot": "ring",
+      "inventoryIconId": "icon_ring_dark",
+      "worldVisualId": "mesh_ring_dark",
+      "weight": 0.1,
+      "goldValue": 50,
+      "stackable": false,
+      "maxStack": 1,
+      "cursed": true,
+      "identifiedByDefault": false,
+      "armorStats": {
+        "acBonus": -2,
+        "armorWeight": "none"
+      }
+    },
+    {
+      "id": "potion_healing",
+      "name": { "en": "Potion of Healing", "hu": "Gyógyital" },
+      "category": "consumable",
+      "inventoryIconId": "icon_potion_red",
+      "worldVisualId": "mesh_potion_red",
+      "weight": 0.5,
+      "goldValue": 50,
+      "stackable": true,
+      "maxStack": 10,
+      "identifiedByDefault": true,
+      "consumableEffect": {
+        "healDice": "2d4+2"
+      }
+    },
+    {
+      "id": "scroll_fireball",
+      "name": { "en": "Scroll of Fireball", "hu": "Tűzgolyó tekercs" },
+      "category": "scroll",
+      "inventoryIconId": "icon_scroll_mage",
+      "worldVisualId": "mesh_scroll_mage",
+      "weight": 0.2,
+      "goldValue": 350,
+      "stackable": true,
+      "maxStack": 5,
+      "identifiedByDefault": true,
+      "linkedSpellId": "fireball"
+    }
+  ],
+  "monsters": [
+    {
+      "id": "orc_warrior",
+      "name": { "en": "Orc Warrior", "hu": "Ork harcos" },
+      "actorVisualId": "actor_orc_warrior",
+      "isUndead": false,
+      "levelOrHd": 1,
+      "maxHpDice": "1d8+1",
+      "baseAc": 6,
+      "thac0": 19,
+      "morale": 8,
+      "xpReward": 35,
+      "attacks": [
+        { "name": { "en": "Axe Slash", "hu": "Fejszecsapás" }, "damageDice": "1d8", "damageType": "slashing", "attackSpeedMs": 1600 }
+      ],
+      "resistances": {},
+      "lootTable": [
+        { "itemId": "potion_healing", "dropChance": 0.2, "minQty": 1, "maxQty": 1 }
+      ]
+    },
+    {
+      "id": "skeleton_guard",
+      "name": { "en": "Skeleton Guard", "hu": "Csontváz őr" },
+      "actorVisualId": "actor_skeleton",
+      "isUndead": true,
+      "levelOrHd": 1,
+      "maxHpDice": "1d8",
+      "baseAc": 7,
+      "thac0": 19,
+      "morale": 12,
+      "xpReward": 65,
+      "attacks": [
+        { "name": { "en": "Rusted Blade", "hu": "Rozsdás penge" }, "damageDice": "1d6", "damageType": "slashing", "attackSpeedMs": 1500 }
+      ],
+      "resistances": { "piercing": 0.5, "cold": 1.0 },
+      "lootTable": [
+        { "itemId": "long_sword", "dropChance": 0.25, "minQty": 1, "maxQty": 1 }
+      ]
+    },
+    {
+      "id": "zombie_shambler",
+      "name": { "en": "Zombie Shambler", "hu": "Zombi" },
+      "actorVisualId": "actor_zombie",
+      "isUndead": true,
+      "levelOrHd": 2,
+      "maxHpDice": "2d8",
+      "baseAc": 8,
+      "thac0": 19,
+      "morale": 12,
+      "xpReward": 65,
+      "attacks": [
+        { "name": { "en": "Rotting Slam", "hu": "Rothadó csapás" }, "damageDice": "1d8", "damageType": "bludgeoning", "attackSpeedMs": 2000 }
+      ],
+      "resistances": { "piercing": 0.75, "cold": 0.5 },
+      "lootTable": []
+    },
+    {
+      "id": "giant_spider",
+      "name": { "en": "Giant Spider", "hu": "Óriáspók" },
+      "actorVisualId": "actor_spider",
+      "isUndead": false,
+      "levelOrHd": 4,
+      "maxHpDice": "4d8+4",
+      "baseAc": 4,
+      "thac0": 16,
+      "morale": 9,
+      "xpReward": 270,
+      "attacks": [
+        { "name": { "en": "Venomous Bite", "hu": "Mérgező harapás" }, "damageDice": "2d4", "damageType": "poison", "attackSpeedMs": 1300 }
+      ],
+      "resistances": { "poison": 0.5 },
+      "lootTable": [
+        { "itemId": "potion_healing", "dropChance": 0.35, "minQty": 1, "maxQty": 1 }
+      ]
+    },
+    {
+      "id": "dark_cleric",
+      "name": { "en": "Darkmoon Cleric", "hu": "Sötéthold pap" },
+      "actorVisualId": "actor_dark_cleric",
+      "isUndead": false,
+      "levelOrHd": 5,
+      "maxHpDice": "5d8",
+      "baseAc": 3,
+      "thac0": 16,
+      "morale": 10,
+      "xpReward": 420,
+      "attacks": [
+        { "name": { "en": "Unholy Mace", "hu": "Átkozott buzogány" }, "damageDice": "1d6+2", "damageType": "bludgeoning", "attackSpeedMs": 1500 }
+      ],
+      "resistances": { "necrotic": 0.5 },
+      "lootTable": [
+        { "itemId": "mace_plus1", "dropChance": 0.4, "minQty": 1, "maxQty": 1 },
+        { "itemId": "scroll_fireball", "dropChance": 0.2, "minQty": 1, "maxQty": 1 }
+      ]
+    },
+    {
+      "id": "beholder_spawn",
+      "name": { "en": "Beholder Spawn", "hu": "Szemlélődő ivadék" },
+      "actorVisualId": "actor_beholder",
+      "isUndead": false,
+      "levelOrHd": 7,
+      "maxHpDice": "7d8+7",
+      "baseAc": 2,
+      "thac0": 13,
+      "morale": 11,
+      "xpReward": 1400,
+      "attacks": [
+        { "name": { "en": "Eye Ray", "hu": "Szemsugár" }, "damageDice": "2d6+2", "damageType": "magic", "attackSpeedMs": 1700 }
+      ],
+      "resistances": { "magic": 0.25 },
+      "lootTable": [
+        { "itemId": "long_sword_plus2", "dropChance": 0.5, "minQty": 1, "maxQty": 1 },
+        { "itemId": "ring_protection_plus1", "dropChance": 0.5, "minQty": 1, "maxQty": 1 }
+      ]
+    }
+  ],
+  "checkRules": [
+    {
+      "id": "PICK_LOCK",
+      "name": { "en": "Pick Lock", "hu": "Zárfeltörés" },
+      "formula": "1d20 + dexMod + level",
+      "defaultDc": 14
+    },
+    {
+      "id": "DETECT_TRAP",
+      "name": { "en": "Detect Trap", "hu": "Csapdaészlelés" },
+      "formula": "1d20 + intMod + level",
+      "defaultDc": 13
+    },
+    {
+      "id": "FORCE_DOOR",
+      "name": { "en": "Force Door", "hu": "Ajtó betörése" },
+      "formula": "1d20 + strMod",
+      "defaultDc": 15
+    },
+    {
+      "id": "FEAR_RESIST",
+      "name": { "en": "Fear Resistance", "hu": "Félelem ellenállás" },
+      "formula": "1d20 + wisMod + moraleMod",
+      "defaultDc": 12
+    },
+    {
+      "id": "SCRIBE_SCROLL",
+      "name": { "en": "Scribe Scroll", "hu": "Tekercs másolása" },
+      "formula": "1d100 + intMod",
+      "defaultDc": 55
+    }
+  ],
+  "partyPresets": [
+    {
+      "id": "classic_delvers",
+      "name": { "en": "Classic Delvers (Lvl 3)", "hu": "Klasszikus kalandozók (3. szint)" },
+      "members": [
+        {
+          "id": "char_aldric",
+          "name": "Aldric",
+          "portraitId": "portrait_fighter_m",
+          "raceId": "human",
+          "classIds": ["fighter"],
+          "alignment": "LN",
+          "row": "front",
+          "levels": { "fighter": 3 },
+          "xp": { "fighter": 4500 },
+          "stats": { "STR": 17, "INT": 10, "WIS": 11, "DEX": 14, "CON": 16, "CHA": 12 },
+          "currentHp": 30,
+          "maxHp": 30,
+          "morale": 10,
+          "equipped": { "main_hand": "long_sword", "off_hand": "medium_shield", "chest": "chainmail" },
+          "spellbookIds": [],
+          "memorizedSpellIds": [],
+          "activeStatuses": []
+        },
+        {
+          "id": "char_seraphina",
+          "name": "Seraphina",
+          "portraitId": "portrait_paladin_f",
+          "raceId": "human",
+          "classIds": ["paladin"],
+          "alignment": "LG",
+          "row": "front",
+          "levels": { "paladin": 3 },
+          "xp": { "paladin": 5000 },
+          "stats": { "STR": 16, "INT": 11, "WIS": 14, "DEX": 13, "CON": 15, "CHA": 17 },
+          "currentHp": 28,
+          "maxHp": 28,
+          "morale": 11,
+          "equipped": { "main_hand": "long_sword_plus2", "chest": "plate_mail", "off_hand": "medium_shield" },
+          "spellbookIds": [],
+          "memorizedSpellIds": [],
+          "activeStatuses": []
+        },
+        {
+          "id": "char_thorin",
+          "name": "Thorin",
+          "portraitId": "portrait_cleric_dwarf",
+          "raceId": "dwarf",
+          "classIds": ["cleric"],
+          "alignment": "LG",
+          "row": "back",
+          "levels": { "cleric": 3 },
+          "xp": { "cleric": 3200 },
+          "stats": { "STR": 14, "INT": 10, "WIS": 17, "DEX": 11, "CON": 16, "CHA": 10 },
+          "currentHp": 24,
+          "maxHp": 24,
+          "morale": 10,
+          "equipped": { "main_hand": "mace_plus1", "chest": "chainmail" },
+          "spellbookIds": [],
+          "memorizedSpellIds": ["cure_light_wounds", "bless", "cure_light_wounds", "aid"],
+          "activeStatuses": []
+        },
+        {
+          "id": "char_lyra",
+          "name": "Lyra",
+          "portraitId": "portrait_mage_elf",
+          "raceId": "elf",
+          "classIds": ["mage"],
+          "alignment": "CG",
+          "row": "back",
+          "levels": { "mage": 3 },
+          "xp": { "mage": 5200 },
+          "stats": { "STR": 9, "INT": 18, "WIS": 13, "DEX": 16, "CON": 12, "CHA": 14 },
+          "currentHp": 12,
+          "maxHp": 12,
+          "morale": 8,
+          "equipped": { "main_hand": "dagger", "ring": "ring_protection_plus1" },
+          "spellbookIds": ["magic_missile", "armor", "shield", "melfs_acid_arrow"],
+          "memorizedSpellIds": ["magic_missile", "magic_missile", "melfs_acid_arrow"],
+          "activeStatuses": []
+        }
+      ]
+    },
+    {
+      "id": "skirmish_company",
+      "name": { "en": "Skirmish Company (Lvl 5)", "hu": "Portyázó csapat (5. szint)" },
+      "members": [
+        {
+          "id": "char_kaelen",
+          "name": "Kaelen",
+          "portraitId": "portrait_ranger_elf",
+          "raceId": "elf",
+          "classIds": ["ranger"],
+          "alignment": "NG",
+          "row": "front",
+          "levels": { "ranger": 5 },
+          "xp": { "ranger": 19000 },
+          "stats": { "STR": 16, "INT": 12, "WIS": 14, "DEX": 17, "CON": 14, "CHA": 11 },
+          "currentHp": 44,
+          "maxHp": 44,
+          "morale": 10,
+          "equipped": { "main_hand": "long_sword_plus2", "off_hand": "dagger", "chest": "leather_armor" },
+          "spellbookIds": [],
+          "memorizedSpellIds": [],
+          "activeStatuses": []
+        },
+        {
+          "id": "char_brenna",
+          "name": "Brenna",
+          "portraitId": "portrait_fighter_mage",
+          "raceId": "elf",
+          "classIds": ["fighter", "mage"],
+          "alignment": "CG",
+          "row": "front",
+          "levels": { "fighter": 4, "mage": 4 },
+          "xp": { "fighter": 9000, "mage": 10500 },
+          "stats": { "STR": 15, "INT": 17, "WIS": 11, "DEX": 16, "CON": 14, "CHA": 12 },
+          "currentHp": 32,
+          "maxHp": 32,
+          "morale": 9,
+          "equipped": { "main_hand": "long_sword", "chest": "chainmail" },
+          "spellbookIds": ["magic_missile", "shield", "blur", "invisibility"],
+          "memorizedSpellIds": ["magic_missile", "magic_missile", "shield", "blur"],
+          "activeStatuses": []
+        },
+        {
+          "id": "char_vesper",
+          "name": "Vesper",
+          "portraitId": "portrait_thief_human",
+          "raceId": "human",
+          "classIds": ["thief"],
+          "alignment": "CN",
+          "row": "back",
+          "levels": { "thief": 5 },
+          "xp": { "thief": 11000 },
+          "stats": { "STR": 12, "INT": 13, "WIS": 10, "DEX": 18, "CON": 13, "CHA": 14 },
+          "currentHp": 26,
+          "maxHp": 26,
+          "morale": 8,
+          "equipped": { "main_hand": "short_bow", "chest": "leather_armor" },
+          "spellbookIds": [],
+          "memorizedSpellIds": [],
+          "activeStatuses": []
+        },
+        {
+          "id": "char_marcus",
+          "name": "Marcus",
+          "portraitId": "portrait_cleric_human",
+          "raceId": "human",
+          "classIds": ["cleric"],
+          "alignment": "LG",
+          "row": "back",
+          "levels": { "cleric": 5 },
+          "xp": { "cleric": 14000 },
+          "stats": { "STR": 14, "INT": 11, "WIS": 18, "DEX": 12, "CON": 15, "CHA": 14 },
+          "currentHp": 36,
+          "maxHp": 36,
+          "morale": 10,
+          "equipped": { "main_hand": "mace_plus1", "chest": "plate_mail", "off_hand": "medium_shield" },
+          "spellbookIds": [],
+          "memorizedSpellIds": ["cure_light_wounds", "cure_light_wounds", "bless", "hold_person_cleric", "prayer"],
+          "activeStatuses": []
+        }
+      ]
+    }
+  ]
+}

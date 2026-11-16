@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --rpg-bg: #17191B;
+    --rpg-surface: #292A28;
+    --rpg-edge: #665B48;
+    --rpg-brass: #C6A365;
+    --rpg-ivory: #EEE3CA;
+    --rpg-muted: #B2ADA0;
+    --rpg-hp: #B74541;
+    --rpg-mana: #3C8EB8;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    background-color: #17191B;
+    color: #EEE3CA;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .font-display {
+    font-family: 'Cinzel', Georgia, serif;
+  }
+
+  .font-mono,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+}
+
+/* Custom subtle dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #17191B;
+}
+::-webkit-scrollbar-thumb {
+  background: #3d3930;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #665B48;
+}

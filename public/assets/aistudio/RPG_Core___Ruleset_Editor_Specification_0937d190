@@ -1,0 +1,394 @@
+# TECHNICAL SPECIFICATION: PLUGGABLE AD&D 2E RPG CORE & FULL-SCREEN RULESET EDITOR
+**Target Repository:** `https://github.com/Bencepapa/voidcrew` (React, TypeScript, Vite, Zustand, Three.js)
+**Module Location:** `src/rpg-core/` (Self-contained, zero-coupling to 3D viewport)
+**UI Paradigm:** Full-screen modal overlay (`<StatsEditorModal />`) mirroring the existing Asset Manager pattern, plus headless runtime (`RpgRuntime`) driving live game logic and in-game debug overrides.
+
+---
+
+## 1. ARCHITECTURAL OVERVIEW
+
+The module is split into two strictly decoupled layers inside `src/rpg-core/`:
+
+1. **Headless RPG Runtime (`src/rpg-core/runtime/`):**
+   - Pure TypeScript state machine & rules engine (no React, DOM, or Three.js imports).
+   - Loads a versioned `RulesetBundle` JSON.
+   - Manages live party roster (4 slots, Front/Back row), active monster instances, HP, descending AC, THAC0, Morale, Vancian spellbooks/slots, status effects, and XP progression.
+   - Accepts **Action Requests** (`performAttack`, `castSpell`, `rollCheck`, `restParty`, `awardXp`) and returns structured **Outcome Event Payloads** for the 3D engine and HUD to render.
+   - Exposes **Live Session Overrides** (`patchActiveMember`, `fullRestoreParty`) so developers can open the editor mid-dungeon, tweak stats/gear/spells, and immediately test combat in 3D.
+
+2. **Full-Screen Ruleset & Stats Editor (`src/rpg-core/editor/`):**
+   - Renders as a full-screen modal overlay (`<StatsEditorModal isOpen onClose ... />`) triggered from `EditorBar` next to `Asset Manager`, or standalone in dev mode.
+   - Uses `voidcrew` design tokens: Blackened Iron `#17191B` (panel), Raised `#292A28`, Edge `#665B48`, Aged Brass `#C6A365`, Warm Ivory `#EEE3CA`, Muted `#B2ADA0`, HP `#B74541`, Mana `#3C8EB8`.
+   - Reuses shared editor primitives (`SharedNumberField` draggable/editable numeric inputs, `HU | EN` i18n toggle, Undo/Redo history stack, Searchable Entity Tree, Right Inspector).
+   - Includes a **Rule Validator** and a lightweight **50-Run Batch Auto-Battle & Dice Check Tester** (runs 50 simulated encounters in <10 ms to sanity-check balance, while real spatial combat is tested live inside `voidcrew`).
+
+---
+
+## 2. FOLDER & FILE STRUCTURE
+
+    src/
+    ├── data/
+    │   └── ruleset/
+    │       └── default-ruleset.json      # Versioned RulesetBundle (AD&D 2e / EOB2 baseline)
+    └── rpg-core/
+        ├── index.ts                      # Public exports: RpgRuntime, StatsEditorModal, types
+        ├── types/
+        │   └── ruleset.types.ts          # All TypeScript interfaces & Zod validation schemas
+        ├── engine/
+        │   ├── dice.ts                   # Seedable d4/d6/d8/d10/d12/d20/d100 expression parser
+        │   ├── rulesEngine.ts            # THAC0 hit math, AC calc, damage, XP split, morale checks
+        │   ├── validator.ts              # Cross-reference & AD&D rule validation engine
+        │   └── batchSimulator.ts         # Lightweight 50-run headless encounter simulator
+        ├── runtime/
+        │   ├── RpgRuntime.ts             # Live session state (Party, Monsters, Combat, Overrides)
+        │   └── events.ts                 # Typed Outcome Events returned to 3D engine / HUD
+        └── editor/
+            ├── StatsEditorModal.tsx      # Full-screen overlay dialog shell (matches Asset Manager)
+            ├── store/
+            │   └── useRulesetEditorStore.ts # Zustand store + undo/redo + localStorage/disk save
+            ├── components/
+            │   ├── EditorTopBar.tsx      # Tabs, Validation badge, Undo/Redo, Import/Export, HU|EN
+            │   ├── EntitySidebar.tsx     # Searchable category tree + "+ New" / "Duplicate"
+            │   └── SharedNumberField.tsx # Draggable horizontal scrub + click-to-type + Shift fine
+            └── panels/
+                ├── StatsFormulasPanel.tsx
+                ├── ClassesXpPanel.tsx    # Interactive XP Curve SVG chart + Levels 1-13 Matrix
+                ├── RacesPanel.tsx
+                ├── SpellsPanel.tsx
+                ├── ItemsPanel.tsx
+                ├── MonstersPanel.tsx
+                ├── PartyPresetsPanel.tsx # Edits premade parties + Live Active Party when in-game
+                └── QuickTestPanel.tsx    # 50-Run Batch Auto-Battle + Basic d20/d6 Check Tester
+
+---
+
+## 3. CORE DATA SCHEMAS (`ruleset.types.ts`)
+
+    export type LocalizedText = { en: string; hu: string };
+
+    export type PrimaryStatId = 'STR' | 'INT' | 'WIS' | 'DEX' | 'CON' | 'CHA';
+    export type AlignmentId =
+      | 'LG' | 'NG' | 'CG'
+      | 'LN' | 'TN' | 'CN'
+      | 'LE' | 'NE' | 'CE';
+
+    export type DamageType =
+      | 'slashing' | 'piercing' | 'bludgeoning'
+      | 'fire' | 'cold' | 'lightning' | 'acid' | 'poison' | 'magic' | 'necrotic';
+
+    export type StatusEffectId =
+      | 'paralyzed' | 'feared' | 'petrified' | 'poisoned' | 'blinded'
+      | 'invisible' | 'improved_invisible' | 'hasted' | 'blessed'
+      | 'protected_evil' | 'armor_spell' | 'shield_spell' | 'downed' | 'dead';
+
+    export interface ClassLevelRow {
+      level: number;                      // 1..13
+      xpRequired: number;                 // Cumulative XP threshold
+      hpGainDice: string;                 // e.g. "1d10" (lvl 1-9) or "+3" (lvl 10+)
+      thac0: number;                      // Descending: 20 down to 8
+      spellSlots: [number, number, number, number, number, number]; // Tiers 1..6
+    }
+
+    export interface ClassDef {
+      id: string;                         // 'fighter' | 'ranger' | 'paladin' | 'cleric' | 'mage' | 'thief'
+      name: LocalizedText;
+      description: LocalizedText;
+      resourceType: 'mana' | 'energy' | 'none'; // HUD rule: Fighter/Thief = 'none' (no empty mana bar)
+      primeRequisite: PrimaryStatId[];    // If >= 16, grants +10% XP bonus
+      hitDie: 'd4' | 'd6' | 'd8' | 'd10';
+      allowedArmorMax: 'none' | 'leather' | 'light_metal' | 'heavy';
+      allowedShieldMax: 'none' | 'small' | 'medium' | 'large';
+      allowedWeaponTags: string[];
+      canDualWield: boolean;              // Ranger: true when wearing <= leather armor
+      spellSchool: 'mage' | 'cleric' | 'none';
+      allowedAlignments?: AlignmentId[];  // e.g. Paladin: ['LG']
+      allowedRaces?: string[];            // e.g. Paladin: ['human']
+      progression: ClassLevelRow[];       // 13 rows (Levels 1-13)
+    }
+
+    export interface RaceDef {
+      id: string;                         // 'human' | 'elf' | 'dwarf' | 'orc' | 'skeleton' | 'zombie'
+      name: LocalizedText;
+      playable: boolean;
+      statModifiers: Partial<Record<PrimaryStatId, number>>;
+      baseMorale: number;                 // 2..12 scale (2d6 morale check)
+      allowedClassIds: string[];
+      allowedMulticlassIds: string[];     // e.g. ['fighter_mage', 'fighter_cleric', 'fighter_mage_cleric']
+      immunities: {
+        raiseDead?: boolean;              // Elf = true (per EOB2 spec)
+        holdPerson?: boolean;
+        fear?: boolean;
+        poison?: boolean;
+        weightTraps?: boolean;            // Skeleton = true (low body weight)
+        arrowCorridorResist?: number;     // Zombie = 0.75 (75% pierce reduction)
+      };
+    }
+
+    export interface SpellDef {
+      id: string;
+      name: LocalizedText;
+      school: 'mage' | 'cleric';
+      tier: 1 | 2 | 3 | 4 | 5 | 6;
+      category: 'offensive' | 'healing' | 'defensive' | 'support' | 'control' | 'detection';
+      targetScope:
+        | 'self' | 'single_ally' | 'all_allies'
+        | 'single_enemy' | 'front_row_enemies' | 'all_enemies' | 'cross_aoe';
+      requiresFrontRow: boolean;          // Touch spells (Shocking Grasp, Cure/Cause Wounds, Harm)
+      castTimeMs: number;
+      formula: {
+        effectType: 'damage' | 'heal' | 'ac_override' | 'buff' | 'debuff' | 'cure_status' | 'utility';
+        dice?: string;                    // e.g. "1d8", "3d6+2", "6d8"
+        scalesWithCasterLevel?: boolean;  // e.g. Magic Missile, Burning Hands, Flame Strike
+        damageType?: DamageType;
+        setBaseAc?: number;               // Armor = 6, Magical Vestment = 5
+        nonStackingGroup?: string;        // e.g. 'base_ac_spell' (Armor vs Shield)
+        applyStatus?: StatusEffectId;
+        removeStatus?: StatusEffectId[];
+        durationSec?: number;
+        moraleDelta?: number;             // e.g. Fear spell forces immediate morale break check
+        saveNegates?: boolean;
+        immuneTags?: string[];            // e.g. Hold Monster immuneTags: ['undead']
+      };
+      description: LocalizedText;
+    }
+
+    export interface ItemDef {
+      id: string;
+      name: LocalizedText;
+      category: 'weapon' | 'shield' | 'armor' | 'accessory' | 'consumable' | 'scroll' | 'quest' | 'resource';
+      slot?: 'main_hand' | 'off_hand' | 'head' | 'chest' | 'hands' | 'feet' | 'neck' | 'ring';
+      inventoryIconId: string;            // Mandatory 2-asset rule: HUD icon
+      worldVisualId: string;              // Mandatory 2-asset rule: 3D floor visual
+      weight: number;
+      goldValue: number;
+      stackable: boolean;
+      maxStack: number;
+      cursed?: boolean;                   // Cannot unequip until Remove Curse cast
+      identifiedByDefault: boolean;       // False hides magicBonus until Improved Identify
+      weaponStats?: {
+        damageDice: string;               // e.g. "1d8" Long Sword, "1d10" Two-Handed Sword
+        damageType: DamageType;
+        magicBonus: number;               // Applied to both THAC0 and Damage
+        attackSpeedMs: number;            // Real-time cooldown cycle in milliseconds
+        range: 'melee' | 'ranged';
+        twoHanded: boolean;
+        tags: string[];
+      };
+      armorStats?: {
+        baseAc?: number;                  // Leather=8, Chainmail=5, Platemail=3
+        acBonus?: number;                 // Shield +1, Ring of Protection +1
+        armorWeight: 'none' | 'leather' | 'light_metal' | 'heavy';
+      };
+      linkedSpellId?: string;             // For Scrolls & Wands
+      consumableEffect?: {
+        healDice?: string;
+        cureStatus?: StatusEffectId[];
+        moraleBonus?: number;
+      };
+    }
+
+    export interface MonsterDef {
+      id: string;
+      name: LocalizedText;
+      actorVisualId: string;              // Maps to ACTOR_TYPES in Level Editor
+      isUndead: boolean;
+      levelOrHd: number;
+      maxHpDice: string;                  // e.g. "2d8+2"
+      baseAc: number;
+      thac0: number;
+      morale: number;                     // 2..12 threshold (2d6 <= morale to hold ground)
+      xpReward: number;
+      attacks: Array<{
+        name: LocalizedText;
+        damageDice: string;
+        damageType: DamageType;
+        attackSpeedMs: number;
+      }>;
+      resistances: Partial<Record<DamageType, number>>; // e.g. { fire: 0.5, cold: -0.5 }
+      lootTable: Array<{ itemId: string; dropChance: number; minQty: number; maxQty: number }>;
+    }
+
+    export interface CheckRuleDef {
+      id: string;                         // e.g. 'PICK_LOCK', 'DETECT_TRAP', 'FORCE_DOOR', 'FEAR_RESIST'
+      name: LocalizedText;
+      formula: string;                    // e.g. "1d20 + dexMod + level" or "1d20 + wisMod + moraleMod"
+      defaultDc: number;
+    }
+
+    export interface CharacterSheetState {
+      id: string;
+      name: string;
+      portraitId: string;
+      raceId: string;
+      classIds: string[];                 // Single ['fighter'] or Multiclass ['fighter', 'mage']
+      alignment: AlignmentId;
+      row: 'front' | 'back';
+      levels: Record<string, number>;     // e.g. { fighter: 3 }
+      xp: Record<string, number>;
+      stats: Record<PrimaryStatId, number>; // 3..18
+      currentHp: number;
+      maxHp: number;
+      morale: number;
+      equipped: Partial<Record<NonNullable<ItemDef['slot']>, string>>;
+      spellbookIds: string[];             // Known Mage spells
+      memorizedSpellIds: string[];        // Currently prepared spells
+      activeStatuses: StatusEffectId[];
+    }
+
+    export interface RulesetBundle {
+      schemaVersion: '1.0.0';
+      rulesetId: string;
+      title: LocalizedText;
+      globalRules: {
+        primeRequisiteXpThreshold: number; // Default: 16
+        primeRequisiteXpBonus: number;     // Default: 0.10 (+10%)
+        critHitD20: number;                // Default: 20
+        critMissD20: number;               // Default: 1
+        moraleCheckDice: string;           // Default: "2d6"
+      };
+      classes: ClassDef[];
+      races: RaceDef[];
+      spells: SpellDef[];
+      items: ItemDef[];
+      monsters: MonsterDef[];
+      checkRules: CheckRuleDef[];
+      partyPresets: Array<{
+        id: string;
+        name: LocalizedText;
+        members: CharacterSheetState[];
+      }>;
+    }
+
+---
+
+## 4. DETERMINISTIC RULES ENGINE (`rulesEngine.ts`)
+
+All game math lives here so the **3D Dungeon Crawler** and **Editor Batch Simulator** produce identical results:
+
+1. **THAC0 Attack Resolution:**
+   - `modifiedThac0 = attacker.thac0 - strAttackMod - weaponMagicBonus - tempBuffBonus`
+   - `effectiveTargetAc = target.ac - dexAcMod - shieldBonus - spellAcBonus`
+   - `requiredRoll = modifiedThac0 - effectiveTargetAc`
+   - Roll `d20`:
+     - If `d20 === 20` -> **Automatic Hit**
+     - If `d20 === 1` -> **Automatic Miss**
+     - Else -> `hit = d20 >= requiredRoll`
+2. **Damage Calculation:**
+   - `raw = rollDice(weapon.damageDice) + strDamageMod + weaponMagicBonus`
+   - `multiplier = 1 - (target.resistances[damageType] ?? 0)`
+   - `finalDamage = Math.max(1, Math.floor(raw * multiplier))`
+3. **Vancian Spellcasting & Memorization:**
+   - **Mage:** Must first transcribe a scroll into `spellbookIds` (success chance based on `INT`), then memorize into available tier slots during Rest. Casting consumes 1 memorized instance.
+   - **Cleric / Paladin (Lvl 9+):** Selects directly from class spell list during Rest to populate memorized spells.
+   - **Scroll Cast:** Bypasses memorized slots and consumes the scroll item from inventory.
+   - **Row Validation:** Spells with `requiresFrontRow: true` fail with `INVALID_ROW` if caster is in `back` row.
+4. **XP & Multiclass Progression:**
+   - If `actor.stats[primaryStat] >= 16`, multiply awarded XP by `1.10`.
+   - If multiclass (e.g., `Fighter/Mage`), split XP equally (`xp / classIds.length`) and evaluate each class's `progression` table independently.
+5. **Morale Check (`2d6`):**
+   - Triggered when a monster group loses 50% HP, an ally dies, or `Fear` is cast.
+   - Roll `2d6`: if `roll > currentMorale`, emit `MORALE_BROKEN` (target flees or surrenders).
+
+---
+
+## 5. HEADLESS RUNTIME & LIVE OVERRIDE API (`RpgRuntime.ts`)
+
+Your main `voidcrew` game interacts with `RpgRuntime` through clean methods and subscribes to outcome events:
+
+    export class RpgRuntime {
+      constructor(bundle: RulesetBundle);
+
+      // 1. Hot-Reload & Live In-Game Debug Overrides (used by StatsEditorModal when opened mid-game)
+      reloadRuleset(bundle: RulesetBundle): void;
+      getActiveParty(): CharacterSheetState[];
+      patchActiveMember(memberId: string, patch: Partial<CharacterSheetState>): void;
+      fullRestoreParty(): void; // Restores full HP, clears negative statuses, refills memorized spells
+
+      // 2. Discovery & UI Inspection (Character Sheets, Codex, Tooltips)
+      getCatalog(): { classes: ClassDef[]; races: RaceDef[]; spells: SpellDef[]; items: ItemDef[] };
+      getCharacterSheet(memberId: string): ComputedCharacterSheet;
+      getMonsterStatus(instanceId: string): ComputedMonsterStatus;
+      inspectItem(itemId: string): ComputedItemTooltip; // Respects identifiedByDefault!
+
+      // 3. Session & Encounter Management
+      loadParty(members: CharacterSheetState[]): void;
+      swapFormation(memberAId: string, memberBId: string): void;
+      spawnEncounter(monsterIds: string[]): MonsterInstance[];
+      restParty(): RestOutcomeEvent[];
+
+      // 4. Gameplay Actions -> Returns structured events for 3D & HUD rendering
+      performAttack(req: { attackerId: string; targetId: string; hand?: 'main' | 'off' }): ActionOutcome;
+      castSpell(req: { casterId: string; spellId: string; targetIds: string[]; source: 'memorized' | 'scroll' }): ActionOutcome;
+      useItem(req: { actorId: string; itemId: string; targetId?: string }): ActionOutcome;
+      rollCheck(req: { actorId: string; checkRuleId: string; dcOverride?: number }): CheckOutcome;
+      awardPartyXp(baseXp: number): LevelUpOutcome[];
+
+      // 5. Persistence
+      serializeState(): string;
+      hydrateState(json: string): void;
+    }
+
+---
+
+## 6. LIGHTWEIGHT BATCH SIMULATOR (`batchSimulator.ts`)
+
+Instead of a heavy turn-by-turn UI replay, keep testing fast and focused:
+
+    export interface BatchSimRequest {
+      bundle: RulesetBundle;
+      partyMembers: CharacterSheetState[];
+      monsterIds: string[];              // e.g. ['orc_warrior', 'orc_warrior', 'giant_spider']
+      iterations: number;                 // Default: 50
+    }
+
+    export interface BatchSimResult {
+      iterations: number;
+      elapsedMs: number;
+      partyWins: number;
+      partyLosses: number;
+      winRatePercent: number;
+      avgRounds: number;
+      totalPartyDeaths: number;
+      enemyMoraleBreaks: number;
+    }
+
+---
+
+## 7. FULL-SCREEN EDITOR OVERLAY CONTRACT (`StatsEditorModal.tsx`)
+
+Mirrors `voidcrew`'s **Asset Manager** modal UX so editors experience zero friction:
+
+    export interface StatsEditorModalProps {
+      isOpen: boolean;
+      onClose: () => void;
+      liveRuntime?: RpgRuntime;           // Optional: when passed from voidcrew, enables Live Party Overrides!
+      initialTab?: 'stats' | 'classes' | 'races' | 'spells' | 'items' | 'monsters' | 'party' | 'test';
+      initialEntityId?: string;
+      onSaveToProject?: (bundle: RulesetBundle) => Promise<void>;
+    }
+
+### UI Layout & Ergonomics
+- **Full-Screen Overlay (`fixed inset-0 z-50 bg-[#17191B]/95`):** Closes on `Esc` or `[ X ]` button, restoring focus to the game or Level Editor.
+- **Top Bar (48 px):**
+  - Module Tabs: `Stats & Formulas` | `Classes & XP` | `Races` | `Spells` | `Items` | `Monsters` | `Party & Live` | `Quick Test`
+  - **Validation Pill:** Live badge showing count of errors/warnings (`#B74541`). Clicking opens a jump-to-issue popover (e.g., *"Paladin alignment must be Lawful Good"*, *"Missing worldVisualId on item"*).
+  - **Actions:** `Undo (Ctrl+Z)`, `Redo (Ctrl+Y)`, `Import JSON`, `Export JSON`, `Save*`, `HU | EN` language switcher.
+- **Left Sidebar (260 px):** Search input (matches both `en` and `hu` labels) + grouped entity tree + `+ Add New` / `Duplicate` / `Delete`.
+- **Center Stage:**
+  - Uses shared **`SharedNumberField`** (horizontal drag to scrub, click to type, `Shift` for fine step, double-click label to reset).
+  - **Classes & XP Tab:** Interactive SVG **XP Curve Graph** comparing all 6 classes (Levels 1–13) above an editable 13-row progression grid (`XP`, `HP Gain`, `THAC0`, `Spell Slots 1–6`).
+  - **Party & Live Tab:** Edits premade party presets, AND when `liveRuntime` is connected in-game, shows an **"ACTIVE DUNGEON PARTY"** section where you can tweak live stats, equip any item, add spells, or click **`Full Heal & Restore`** before jumping straight back into 3D combat.
+- **Quick Test Tab (`QuickTestPanel.tsx`):**
+  - **50-Run Auto-Battle:** Select a Premade Party + Enemy Group, click **`Run 50 Battles`**, and view instant summary cards (`Win Rate %`, `Avg Rounds`, `Party Deaths`, `Enemy Morale Breaks`).
+  - **Basic Dice & Check Roller:** Pick any Character, select a Check (`PICK_LOCK`, `FEAR_RESIST`, `THAC0 Attack`) or custom formula (`1d20 + 3`, `2d6`), and click **`Roll`** to inspect the raw dice breakdown.
+
+---
+
+## 8. AGENT IMPLEMENTATION SEQUENCE
+
+When feeding this document to an AI coding agent, instruct it to execute in 4 sequential steps:
+
+1. **Step 1 (Data & Schemas):** Create `src/rpg-core/types/ruleset.types.ts` and `src/data/ruleset/default-ruleset.json` pre-populated with all 6 AD&D classes (Fighter, Ranger, Paladin, Cleric, Mage, Thief with full Levels 1–13 XP/THAC0/Spell Slot tables), 6 races (Human, Elf, Dwarf, Orc, Skeleton, Zombie), all 44 Eye of the Beholder II spells (Mage 1–6, Cleric 1–6), starter weapons/armor, sample monsters, and 2 premade parties.
+2. **Step 2 (Rules Engine, Runtime & Batch Sim):** Implement `dice.ts`, `rulesEngine.ts`, `validator.ts`, `batchSimulator.ts`, and `RpgRuntime.ts` (including `patchActiveMember` and `fullRestoreParty`) with unit tests verifying THAC0, descending AC, Vancian spell consumption, Prime Requisite +10% XP, Multiclass XP splitting, and `2d6` Morale checks.
+3. **Step 3 (Standalone Editor UI):** Build `<StatsEditorModal />` and all 8 panels using the blackened iron (`#17191B`) + aged brass (`#C6A365`) palette, `SharedNumberField`, `HU | EN` localization, and the `QuickTestPanel` (50-run batch sim + basic `d20`/`d6` roller).
+4. **Step 4 (`voidcrew` Integration):** Add a `Stats Editor` button next to `Asset Manager` in `src/editor/EditorBar.tsx` and wire `RpgRuntime` into the game HUD/combat loop with `liveRuntime` passed into `<StatsEditorModal />`.
