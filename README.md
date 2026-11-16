@@ -16,7 +16,7 @@ Pluggable AD&D 2nd Edition RPG engine, live encounter runtime, deterministic bat
 ## Local Development
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 npm run dev
 ```
 
